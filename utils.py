@@ -1,0 +1,177 @@
+# utils.py
+
+import os
+import json
+import fitz
+from dotenv import load_dotenv
+from google import genai
+
+# -----------------------------
+# Load Environment Variables
+# -----------------------------
+load_dotenv()
+
+API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not API_KEY:
+    raise Exception("GEMINI_API_KEY not found inside .env file.")
+
+# -----------------------------
+# Gemini Client
+# -----------------------------
+client = genai.Client(api_key=API_KEY)
+
+# -----------------------------
+# Model Name
+# -----------------------------
+MODEL_NAME = "gemini-3.6-flash"
+
+
+# ----------------------------------------------------
+# Generic Gemini Function
+# ----------------------------------------------------
+def ask_gemini(prompt: str) -> str:
+    """
+    Send prompt to Gemini and return text response.
+    """
+
+    try:
+
+        response = client.models.generate_content(
+            model="gemini-3.6-flash",
+            contents=prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+        return f"Error : {str(e)}"
+
+
+# ----------------------------------------------------
+# Read PDF Resume
+# ----------------------------------------------------
+def read_pdf(file):
+
+    document = fitz.open(stream=file.read(), filetype="pdf")
+
+    text = ""
+
+    for page in document:
+        text += page.get_text()
+
+    document.close()
+
+    return text
+
+
+# ----------------------------------------------------
+# Save JSON
+# ----------------------------------------------------
+def save_json(data, filename):
+
+    with open(filename, "w", encoding="utf-8") as f:
+
+        json.dump(
+            data,
+            f,
+            indent=4,
+            ensure_ascii=False
+        )
+
+
+# ----------------------------------------------------
+# Load JSON
+# ----------------------------------------------------
+def load_json(filename):
+
+    if not os.path.exists(filename):
+        return {}
+
+    with open(filename, "r", encoding="utf-8") as f:
+
+        return json.load(f)
+
+
+# ----------------------------------------------------
+# Calculate Average Score
+# ----------------------------------------------------
+def average(scores):
+
+    if len(scores) == 0:
+        return 0
+
+    return round(sum(scores) / len(scores), 2)
+
+
+# ----------------------------------------------------
+# Convert Text to List
+# ----------------------------------------------------
+def text_to_list(text):
+
+    lines = text.split("\n")
+
+    output = []
+
+    for line in lines:
+
+        line = line.strip()
+
+        if line == "":
+            continue
+
+        if line.startswith("-"):
+            line = line[1:].strip()
+
+        if line[0].isdigit():
+
+            line = line.split(".", 1)[-1].strip()
+
+        output.append(line)
+
+    return output
+
+
+# ----------------------------------------------------
+# Extract Integer Score
+# ----------------------------------------------------
+def extract_score(text):
+
+    import re
+
+    numbers = re.findall(r"\d+", text)
+
+    if len(numbers) == 0:
+        return 0
+
+    score = int(numbers[0])
+
+    if score > 100:
+        score = 100
+
+    return score
+
+
+# ----------------------------------------------------
+# Store Interview History
+# ----------------------------------------------------
+def save_history(candidate, interview_data):
+
+    history = load_json("data/history.json")
+
+    history[candidate] = interview_data
+
+    save_json(history, "data/history.json")
+
+
+# ----------------------------------------------------
+# Read Interview History
+# ----------------------------------------------------
+def load_history(candidate):
+
+    history = load_json("data/history.json")
+
+    if candidate in history:
+        return history[candidate]
+
+    return None
