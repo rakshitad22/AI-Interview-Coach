@@ -1,0 +1,7 @@
+streamlit
+google-genai
+python-dotenv
+PyMuPDF
+plotly
+streamlit-echarts
+streamlit-extras
