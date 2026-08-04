@@ -5,8 +5,6 @@
 
 import streamlit as st
 
-from streamlit_extras.metric_cards import style_metric_cards
-from streamlit_echarts import st_echarts
 import plotly.graph_objects as go
 
 from resume import ResumeAnalyzer
@@ -126,7 +124,7 @@ def gauge(title, score):
 
     st_echarts(option, height="250px")
 
-style_metric_cards()
+
 
 
 # ============================================================

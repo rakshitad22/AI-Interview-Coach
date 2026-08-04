@@ -2,6 +2,5 @@ streamlit
 google-genai
 python-dotenv
 PyMuPDF
+pandas
 plotly
-streamlit-echarts
-streamlit-extras
