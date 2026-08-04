@@ -1,7 +1,6 @@
 # evaluate.py
 
 import re
-from turtle import st
 from utils import ask_gemini
 
 
@@ -98,7 +97,7 @@ Suggestions:
             )
         }
 
-        st.write(result)
+    
 
         self.results.append(result)
 

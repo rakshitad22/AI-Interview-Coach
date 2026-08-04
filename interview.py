@@ -27,7 +27,12 @@ class InterviewGenerator:
             resume=resume
         )
 
-        response = ask_gemini(prompt)
+        response = ask_gemini(
+    prompt +
+    "\n\nReturn ONLY the questions. Do NOT write headings, introductions, explanations, or numbering."
+)
+
+        print(response)
 
         self.hr_questions = text_to_list(response)
 
@@ -43,7 +48,10 @@ class InterviewGenerator:
             resume=resume
         )
 
-        response = ask_gemini(prompt)
+        response = ask_gemini(
+    prompt +
+    "\n\nReturn ONLY the questions. Do NOT write headings, introductions, explanations, or numbering."
+)
 
         self.technical_questions = text_to_list(response)
 

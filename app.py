@@ -5,6 +5,12 @@
 
 import streamlit as st
 
+st.set_page_config(
+    page_title="AI Interview Coach",
+    page_icon="🤖",
+    layout="wide"
+)
+
 import plotly.graph_objects as go
 
 from resume import ResumeAnalyzer
@@ -31,21 +37,6 @@ def glass_card(title, value):
     </div>
     """, unsafe_allow_html=True)
 
-def gauge(title, score):
-
-    option = {
-
-        "series":[
-            {
-                "type":"gauge",
-                "progress":{"show":True},
-                "detail":{"valueAnimation":True},
-                "data":[{"value":score,"name":title}]
-            }
-        ]
-    }
-
-    st_echarts(option,height="300px")
 
 st.markdown("""
 <style>
@@ -83,15 +74,7 @@ box-shadow:0px 8px 20px rgba(0,0,0,.3);
 # Page Configuration
 # ============================================================
 
-st.set_page_config(
 
-    page_title="AI Interview Coach",
-
-    page_icon="🤖",
-
-    layout="wide"
-
-)
 
 def load_css():
     with open("styles/style.css") as f:
@@ -99,30 +82,6 @@ def load_css():
 
 load_css()
 
-def gauge(title, score):
-
-    option = {
-        "series": [
-            {
-                "type": "gauge",
-                "min": 0,
-                "max": 100,
-                "progress": {"show": True},
-                "detail": {
-                    "formatter": "{value}%",
-                    "fontSize": 20
-                },
-                "data": [
-                    {
-                        "value": score,
-                        "name": title
-                    }
-                ]
-            }
-        ]
-    }
-
-    st_echarts(option, height="250px")
 
 
 
@@ -389,7 +348,7 @@ uploaded_file = st.file_uploader(
 # Resume Analysis
 # ============================================================
 
-if menu == "Resume Analysis":
+if menu == "📄 Resume Analysis":
 
     st.header("📄 Resume Analysis")
 
@@ -403,13 +362,20 @@ if menu == "Resume Analysis":
 
             success, message = resume_analyzer.load_resume(uploaded_file)
 
-        if success:
+            st.write("Success:", success)
+            st.write("Message:", message)
+
+        if success is True:
 
             st.success(message)
+
+            st.write("Resume loaded successfully.")
 
             st.session_state.resume_uploaded = True
 
             st.session_state.resume_text = resume_analyzer.get_resume_text()
+
+            st.write("Analyze button loaded")
 
             if st.button("Analyze Resume"):
 
@@ -517,7 +483,7 @@ if menu == "Resume Analysis":
 # Interview Page
 # ============================================================
 
-elif menu == "Interview":
+elif menu == "💼 Interview":
 
     st.header("💼 AI Mock Interview")
 
@@ -556,11 +522,15 @@ elif menu == "Interview":
         st.markdown(f"""
         <div style="
         padding:20px;
-        border-radius:12px;
-        background:#eef4ff;
-        border-left:6px solid #4F8BF9;
-        font-size:18px;">
-        <b>💬 {question}</b>
+        border-radius:15px;
+        background:linear-gradient(135deg,#1E293B,#334155);
+        border-left:6px solid #38BDF8;
+        color:white;
+        font-size:18px;
+        font-weight:600;
+        box-shadow:0 8px 20px rgba(0,0,0,.25);
+        ">
+        💬 {question}
         </div>
         """, unsafe_allow_html=True)
 
@@ -750,7 +720,7 @@ elif menu == "Interview":
 # Dashboard
 # ============================================================
 
-elif menu == "Dashboard":
+elif menu == "📊 Dashboard":
 
     st.header("📊 Interview Dashboard")
 
@@ -759,8 +729,6 @@ elif menu == "Dashboard":
         st.warning("Complete the interview first.")
 
     else:
-
-        evaluator.results = st.session_state.results
 
         evaluator.results = st.session_state.results
         report = evaluator.final_report()
@@ -808,19 +776,17 @@ elif menu == "Dashboard":
 
         st.divider()
 
-        st.subheader("📊 Performance Gauges")
+        st.subheader("📊 Performance")
 
         c1, c2 = st.columns(2)
 
         with c1:
-            gauge("Technical", report["Technical Knowledge"])
-            gauge("Communication", report["Communication"])
+            st.metric("Technical", report["Technical Knowledge"])
+            st.metric("Communication", report["Communication"])
 
         with c2:
-            gauge("Confidence", report["Confidence"])
-            gauge("Completeness", report["Completeness"])
-
-        st.divider()
+            st.metric("Confidence", report["Confidence"])
+            st.metric("Completeness", report["Completeness"])
 
         st.divider()
 
@@ -1019,7 +985,7 @@ elif menu == "Dashboard":
 # Interview History
 # ============================================================
 
-elif menu == "Interview History":
+elif menu == "📚 Interview History":
 
     st.header("📚 Interview History")
 

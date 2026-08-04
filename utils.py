@@ -120,14 +120,24 @@ def text_to_list(text):
         if line == "":
             continue
 
+        # Skip introductory lines
+        if line.lower().startswith("here are"):
+            continue
+
+        if "interview questions" in line.lower():
+            continue
+
+        # Remove bullets
         if line.startswith("-"):
             line = line[1:].strip()
 
-        if line[0].isdigit():
+        # Remove numbering like 1. 2. etc.
+        if len(line) > 2 and line[0].isdigit() and "." in line:
+            line = line.split(".", 1)[1].strip()
 
-            line = line.split(".", 1)[-1].strip()
-
-        output.append(line)
+        # Ignore empty lines after cleaning
+        if line:
+            output.append(line)
 
     return output
 
