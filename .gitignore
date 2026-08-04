@@ -1,6 +1,4 @@
+.env
 __pycache__/
 *.pyc
-.venv/
-venv/
-.env
-.streamlit/secrets.toml
+data/history.json
