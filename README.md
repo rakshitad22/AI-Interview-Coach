@@ -43,37 +43,6 @@ An intelligent interview preparation platform that analyzes resumes, generates p
 
 ---
 
-# 📷 Screenshots
-
-## 🏠 Home Page
-
-> *(Add Screenshot Here)*
-
----
-
-## 📄 Resume Analysis
-
-> *(Add Screenshot Here)*
-
----
-
-## 💼 AI Interview
-
-> *(Add Screenshot Here)*
-
----
-
-## 📊 Performance Dashboard
-
-> *(Add Screenshot Here)*
-
----
-
-## 📚 Interview History
-
-> *(Add Screenshot Here)*
-
----
 
 # 🛠 Tech Stack
 
