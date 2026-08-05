@@ -43,6 +43,9 @@ class ResumeAnalyzer:
 
         response = ask_gemini(prompt)
 
+        if response.startswith("⚠️"):
+            return response
+
         self.analysis = response
 
         return response

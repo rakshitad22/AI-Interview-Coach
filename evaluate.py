@@ -57,6 +57,20 @@ Suggestions:
         print("\n===== GEMINI RESPONSE =====")
         print(response)
         print("===========================\n")
+        if response.startswith("Error"):
+            return {
+                "question": question,
+                "answer": answer,
+                "evaluation": response,
+                "technical": 0,
+                "communication": 0,
+                "confidence": 0,
+                "completeness": 0,
+                "overall": 0,
+                "strengths": ["Evaluation failed"],
+                "weaknesses": ["Gemini API Error"],
+                "suggestions": ["Try again later"]
+            }
 
         result = {
             "question": question,

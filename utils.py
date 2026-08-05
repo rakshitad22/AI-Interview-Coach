@@ -31,21 +31,46 @@ MODEL_NAME = "gemini-3.6-flash"
 # Generic Gemini Function
 # ----------------------------------------------------
 def ask_gemini(prompt: str) -> str:
-    """
-    Send prompt to Gemini and return text response.
-    """
 
     try:
-
         response = client.models.generate_content(
-            model="gemini-3.6-flash",
+            model=MODEL_NAME,
             contents=prompt
         )
 
         return response.text
 
     except Exception as e:
-        return f"Error : {str(e)}"
+
+        error = str(e)
+
+        if "429" in error:
+            return """
+⚠️ AI service is temporarily unavailable because the daily request limit has been reached.
+
+Please try again later or use another API key.
+"""
+
+        elif "503" in error:
+            return """
+⚠️ AI service is currently busy.
+
+Please wait a few seconds and try again.
+"""
+
+        elif "404" in error:
+            return """
+⚠️ Selected AI model is unavailable.
+
+Please contact the administrator.
+"""
+
+        else:
+            return """
+⚠️ Unable to connect to Gemini AI.
+
+Please try again later.
+"""
 
 
 # ----------------------------------------------------
@@ -139,7 +164,7 @@ def text_to_list(text):
         if line:
             output.append(line)
 
-    return output
+    return output   
 
 
 # ----------------------------------------------------

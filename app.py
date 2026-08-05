@@ -383,6 +383,12 @@ if menu == "📄 Resume Analysis":
 
                     analysis = resume_analyzer.analyze_resume()
 
+                    if analysis.startswith("⚠️"):
+                        st.warning(analysis)
+                        st.stop()
+
+                    st.success("Resume Analysis Completed!")
+
                     summary = resume_analyzer.summary()
 
                     st.session_state.resume_analysis = analysis
@@ -391,7 +397,7 @@ if menu == "📄 Resume Analysis":
 
                     st.session_state.resume_score = summary["resume_score"]
 
-                st.success("Resume Analysis Completed!")
+            
 
         if st.session_state.resume_analysis != "":
 
